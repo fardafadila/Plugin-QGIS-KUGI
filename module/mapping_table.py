@@ -71,5 +71,41 @@ class combo_table(QtWidgets.QDialog, FORM_CLASS):
                     listComboCoba =[]
                     for listCombo in combo:
                         listCombo.addItem(t)
-                        listComboCoba.append(listCombo)   
+                        listComboCoba.append(listCombo)  
+        return(listComboCoba)
+
+    def get_matched (self):
+        #combo2 = self.populateCombo()
+        self.matchedList= []
+        listCombo2 = self.listCombo
+        #INI LIST TIPE DATA YANG MATCH
+        self.tipedataMatched = []
+
+        for item in listCombo2:
+            textFull = item.currentText()
+            text = textFull.split(" ")[0]
+            self.matchedList.append(text)
+            tipe2 = textFull.split(" ")[-1]
+            tipe_data_matched = tipe2.strip(')')
+            self.tipedataMatched.append(tipe_data_matched)
+        #print (self.tipedataMatched)
+        self.namaFieldLayer = []
+        layer = self.inputCombo.currentLayer()
+        prov = layer.dataProvider()
+        field_names = [field.name() for field in prov.fields()] 
+        jumlah_field = 0
+        #INI LIST TIPE DATA FIELD LAYERNYA
+        self.tipeDataLayer = []
+        for count, f in enumerate(field_names):
+            self.namaFieldLayer.append(f)
+            jumlah_field +=1
+        for field in layer.fields():
+            tipe_data = field.typeName()
+            self.tipeDataLayer.append(tipe_data)
+
+        self.zipField = dict(zip(self.namaFieldLayer,self.matchedList))
+        self.zipTipeMatched =  [(self.tipeDataLayer[i], self.tipedataMatched[i]) for i in range(0, len(self.tipeDataLayer))]
+        print (self.zipField)
+        print (self.zipTipeMatched)
+        return (self.zipField, self.zipTipeMatched)
         
