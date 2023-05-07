@@ -77,6 +77,7 @@ class kugiDialog(QtWidgets.QDialog, FORM_CLASS):
         self.unsurCombo.currentTextChanged.connect(self.mapping_instance.populateCombo)
         self.inputCombo.currentTextChanged.connect(self.unsur.populateUnsur)
         self.inputCombo.currentTextChanged.connect(self.mapping_instance.makeCombo)
+        self.cancelButton.clicked.connect(self.mapping_instance.get_matched)
 
 
         """self.fieldTable.setColumnWidth(0,275)
