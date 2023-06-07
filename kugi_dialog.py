@@ -30,7 +30,8 @@ from .module.unsur import parse_unsur
 from .module.layer import layer
 from .module.attribute import parse_struktur
 from .module.mapping_table import combo_table
-
+from .module.output import output_c
+from .module.dialog import my_dialog
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets, QtCore
@@ -41,7 +42,8 @@ from qgis.PyQt.QtGui import QDesktopServices
 from qgis.core import (QgsVectorLayerCache, QgsFeatureRequest, QgsField, QgsProject, QgsWkbTypes, QgsCoordinateReferenceSystem,
                         QgsVectorLayer, QgsVectorFileWriter)
 from qgis.gui import (QgsAttributeTableModel, QgsAttributeTableView, QgsAttributeTableFilterModel)
-
+from qgis.PyQt.QtCore import Qt, QThread
+from qgis.PyQt.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
 
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
@@ -67,17 +69,21 @@ class kugiDialog(QtWidgets.QDialog, FORM_CLASS):
         displayUnsur = self.unsur.daftarUnsur
         self.mapping_instance = combo_table(self.inputCombo, self.fieldTable, self.unsurCombo, self.kategoriCombo, self)
         self.atribut_instance = parse_struktur(self.unsurCombo, self.kategoriCombo, self.inputCombo, self)
-        
-        
+        dialog = my_dialog()
+        self.output_c.out_folder()
+
         self.kategoriCombo.addItems(displayKategori)
         self.kategoriCombo.currentTextChanged.connect(self.unsur.getUnsur)
         self.kategoriCombo.currentTextChanged.connect(self.unsur.populateUnsur)
         self.inputCombo.currentTextChanged.connect(self.layer_instance.getLayer)
         self.unsurCombo.addItems(displayUnsur)        
         self.unsurCombo.currentTextChanged.connect(self.mapping_instance.populateCombo)
+        self.unsurCombo.currentTextChanged.connect(dialog.progdialog)
         self.inputCombo.currentTextChanged.connect(self.unsur.populateUnsur)
         self.inputCombo.currentTextChanged.connect(self.mapping_instance.makeCombo)
+        #self.unsurCombo.currentTextChanged.connect(my_dialog.coba_dlg)
+        self.outputButton.clicked.connect(self.output_c.outFolder)
         self.cancelButton.clicked.connect(self.mapping_instance.get_matched)
-
+        
 
       
